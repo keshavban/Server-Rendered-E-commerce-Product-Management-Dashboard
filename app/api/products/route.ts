@@ -2,17 +2,17 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
-import { Product } from "@/models/Product";
+import  Product  from "@/models/Product";
 
 /* =========================
    GET → Fetch all products
    ========================= */
 export async function GET() {
-  const session = await getServerSession(authOptions);
+ // const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  //if (!session) {
+ //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  //}
 
   await connectDB();
 
@@ -25,11 +25,11 @@ export async function GET() {
    POST → Create product
    ========================= */
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
+//  const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+//  if (!session) {
+//    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // }
 
   const body = await req.json();
   const { name, description, price, stock, imageUrl } = body;

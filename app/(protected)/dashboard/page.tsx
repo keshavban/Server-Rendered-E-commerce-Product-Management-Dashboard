@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { connectDB } from "@/lib/db";
-import {Product} from "@/models/Product";
+import Product from "@/models/Product";
 import StockChart from "@/components/StockChart";
 import CategoryStockChart from "@/components/CategoryStockChart";
 import LowStockAlert from "@/components/LowStockAlert";

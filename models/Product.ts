@@ -1,41 +1,26 @@
-import mongoose, { Schema, models } from "mongoose";
+import { Schema, models, model } from "mongoose";
 
-const ProductSchema = new Schema(
+export interface IProduct {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  imageUrl?: string;
+  createdAt: Date;
+}
+
+const ProductSchema = new Schema<IProduct>(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-
-    stock: {
-      type: Number,
-      required: true,
-      min: 0 ,
-    },
-
-    image: {
-      type: String,
-      required: true,
-    },
-
-    status: {
-      type: String,
-      enum: ["ACTIVE", "INACTIVE"],
-      default: "ACTIVE",
-    },
+    name: { type: String, required: true, trim: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true, min: 0 },
+    stock: { type: Number, required: true, min: 0 },
+    imageUrl: { type: String },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const Product = models.Product || mongoose.model("Product", ProductSchema);
+const Product =
+  models.Product || model<IProduct>("Product", ProductSchema);
 
 export default Product;

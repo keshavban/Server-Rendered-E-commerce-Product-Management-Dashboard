@@ -1,16 +1,31 @@
 import Link from "next/link";
+import type { Session } from "next-auth";
 
-export default function Sidebar() {
+type SidebarProps = {
+  session: Session | null;
+};
+
+export default function Sidebar({ session }: SidebarProps) {
   return (
-    <aside className="w-64 bg-gray-900 text-white p-4">
-      <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
+    <aside className="w-64 bg-white border-r p-6">
+      <nav className="space-y-4">
+        <Link href="/dashboard" className="block hover:underline">
+          Dashboard
+        </Link>
 
-      <nav className="flex flex-col gap-4 mt-6">
-  <Link href="/" className="hover:text-gray-300">Dashboard</Link>
-  <a href="/products" className="hover:text-gray-300">Products</a>
-  <a href="/admins" className="hover:text-gray-300">Admins</a>
-</nav>
+        <Link href="/products" className="block hover:underline">
+          Products
+        </Link>
 
+        {session?.user?.role === "SUPER_ADMIN" && (
+          <Link
+            href="/admins"
+            className="block hover:underline text-red-600"
+          >
+            Admin Management
+          </Link>
+        )}
+      </nav>
     </aside>
   );
 }
