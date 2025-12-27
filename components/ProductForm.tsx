@@ -28,6 +28,7 @@ export default function ProductForm() {
         price: Number(form.price),
         stock: Number(form.stock),
         imageUrl: form.imageUrl || undefined,
+        category: form.category || undefined,
       }),
     });
 
@@ -60,7 +61,19 @@ export default function ProductForm() {
         className="w-full p-2 border"
         required
       />
-
+    <select
+  className="border rounded p-3 w-full bg-slate-900"
+  value={form.category}
+  onChange={(e) =>
+    setForm({ ...form, category: e.target.value })
+  }
+>
+  <option value="">Select Category</option>
+  <option value="books">Books</option>
+  <option value="Clothing">Clothing</option>
+  <option value="Electronics">Electronics</option>
+  <option value="Other">Other</option>
+</select>
       <input
         name="price"
         type="number"
@@ -88,19 +101,7 @@ export default function ProductForm() {
         onChange={handleChange}
         className="w-full p-2 border"
       />
-<select
-  className="border rounded p-3 w-full bg-slate-900"
-  value={form.category}
-  onChange={(e) =>
-    setForm({ ...form, category: e.target.value })
-  }
->
-  <option value="">Select Category</option>
-  <option value="Books">Books</option>
-  <option value="Clothing">Clothing</option>
-  <option value="Electronics">Electronics</option>
-  <option value="Other">Other</option>
-</select>
+
 
       <button type="submit" className="bg-black text-white px-4 py-2">
         Create Product

@@ -11,7 +11,7 @@ export const productSchema = z.object({
   imageUrl: z.string().url().optional(),
 
   // ✅ NEW
-  category: z.string().min(1).optional(),
+  category: z.string().min(1),
 });
 
 /* =========================

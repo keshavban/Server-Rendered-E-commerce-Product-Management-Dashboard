@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
 
-/* ================= TYPES ================= */
-
 type Sale = {
   month: string;
   units: number;
@@ -12,10 +10,11 @@ type Sale = {
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const body = await req.json();
-  const quantity: number = body.quantity;
+  const { id } = await context.params; // ✅ REQUIRED FIX
+
+  const { quantity } = await req.json();
 
   if (!quantity || quantity <= 0) {
     return NextResponse.json({ error: "Invalid quantity" }, { status: 400 });
@@ -23,7 +22,7 @@ export async function POST(
 
   await connectDB();
 
-  const product = await Product.findById(params.id);
+  const product = await Product.findById(id);
   if (!product) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -35,23 +34,21 @@ export async function POST(
     );
   }
 
-  /* ---------- UPDATE STOCK ---------- */
+  // update stock
   product.stock -= quantity;
 
-  /* ---------- UPDATE SALES ---------- */
-  const month = new Date().toISOString().slice(0, 7); // YYYY-MM
+  // update sales
+  const month = new Date().toISOString().slice(0, 7);
 
   const sales: Sale[] = Array.isArray(product.sales)
     ? product.sales
     : [];
 
-  const existingSale = sales.find(
-    (s: Sale) => s.month === month
-  );
+  const existing = sales.find((s) => s.month === month);
 
-  if (existingSale) {
-    existingSale.units += quantity;
-    existingSale.totalAmount += quantity * product.price;
+  if (existing) {
+    existing.units += quantity;
+    existing.totalAmount += quantity * product.price;
   } else {
     sales.push({
       month,
@@ -61,11 +58,7 @@ export async function POST(
   }
 
   product.sales = sales;
-
   await product.save();
 
-  return NextResponse.json({
-    success: true,
-    remainingStock: product.stock,
-  });
+  return NextResponse.json({ success: true });
 }

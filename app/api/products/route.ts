@@ -40,10 +40,10 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  //const session = await getServerSession(authOptions);
+  //if (!session) {
+  //  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  //}
 
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");

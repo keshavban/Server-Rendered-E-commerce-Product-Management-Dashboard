@@ -41,6 +41,7 @@ export default function EditProductPage() {
           price: String(data.price),
           stock: String(data.stock),
           imageUrl: data.imageUrl || "",
+          category: data.category || "",
         })
       );
   }, [id]);
@@ -93,7 +94,7 @@ export default function EditProductPage() {
   }
 >
   <option value="">Select Category</option>
-  <option value="Books">Books</option>
+  <option value="books">Books</option>
   <option value="Electronics">Electronics</option>
   <option value="Clothing">Clothing</option>
 </select>

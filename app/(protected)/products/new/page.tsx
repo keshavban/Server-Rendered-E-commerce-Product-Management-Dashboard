@@ -63,7 +63,7 @@ export default function NewProductPage() {
   }
 >
   <option value="">Select Category</option>
-  <option value="Books">Books</option>
+  <option value="books">Books</option>
   <option value="Electronics">Electronics</option>
   <option value="Clothing">Clothing</option>
 </select>
