@@ -139,7 +139,7 @@ const filteredProducts = products.filter((p) => {
     onChange={(e) => setCategory(e.target.value)}
   >
     <option value="">All Categories</option>
-    <option value="Books">Books</option>
+    <option value="books">Books</option>
     <option value="Clothing">Clothing</option>
     <option value="Electronics">Electronics</option>
     <option value="Other">Other</option>
