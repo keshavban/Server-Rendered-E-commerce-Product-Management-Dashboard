@@ -9,6 +9,7 @@ export default function ProductForm() {
     price: "",
     stock: "",
     imageUrl: "",
+    category : ""
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,7 +38,7 @@ export default function ProductForm() {
     }
 
     alert("Product created successfully!");
-    setForm({ name: "", description: "", price: "", stock: "", imageUrl: "" });
+    setForm({ name: "", description: "", price: "", stock: "", imageUrl: "" ,category:""});
   };
 
   return (
@@ -87,6 +88,19 @@ export default function ProductForm() {
         onChange={handleChange}
         className="w-full p-2 border"
       />
+<select
+  className="border rounded p-3 w-full bg-slate-900"
+  value={form.category}
+  onChange={(e) =>
+    setForm({ ...form, category: e.target.value })
+  }
+>
+  <option value="">Select Category</option>
+  <option value="Books">Books</option>
+  <option value="Clothing">Clothing</option>
+  <option value="Electronics">Electronics</option>
+  <option value="Other">Other</option>
+</select>
 
       <button type="submit" className="bg-black text-white px-4 py-2">
         Create Product

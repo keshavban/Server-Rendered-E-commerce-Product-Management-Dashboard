@@ -1,26 +1,30 @@
-import { Schema, models, model } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-export interface IProduct {
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  imageUrl?: string;
-  createdAt: Date;
-}
-
-const ProductSchema = new Schema<IProduct>(
+const SaleSchema = new Schema(
   {
-    name: { type: String, required: true, trim: true },
-    description: { type: String, required: true },
-    price: { type: Number, required: true, min: 0 },
-    stock: { type: Number, required: true, min: 0 },
-    imageUrl: { type: String },
+    month: { type: String, required: true }, // "2025-01"
+    units: { type: Number, required: true },
+    totalAmount: { type: Number, required: true },
+  },
+  { _id: false }
+);
+
+const ProductSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    description: String,
+    price: { type: Number, required: true },
+    stock: { type: Number, required: true },
+    imageUrl: String,
+
+    // ✅ CATEGORY
+    category: { type: String, required: true },
+
+    // ✅ SALES (IMPORTANT)
+    sales: { type: [SaleSchema], default: [] },
   },
   { timestamps: true }
 );
 
-const Product =
-  models.Product || model<IProduct>("Product", ProductSchema);
-
-export default Product;
+export default mongoose.models.Product ||
+  mongoose.model("Product", ProductSchema);

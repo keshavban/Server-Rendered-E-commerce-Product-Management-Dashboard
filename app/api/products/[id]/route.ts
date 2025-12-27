@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
+import { productSchema } from "@/lib/validators/product";
 
 /* =========================
    GET → Fetch single product
@@ -9,10 +10,9 @@ export async function GET(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params; // ✅ REQUIRED in Next.js 14+
+  const { id } = await context.params;
 
   await connectDB();
-
   const product = await Product.findById(id);
 
   if (!product) {
@@ -26,20 +26,27 @@ export async function GET(
 }
 
 /* =========================
-   PUT → Update product
+   PUT → Update product (by id)
    ========================= */
 export async function PUT(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params; // ✅ REQUIRED
+  const { id } = await context.params;
   const body = await req.json();
 
-  await connectDB();
+  const parsed = productSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { errors: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    );
+  }
 
+  await connectDB();
   const updatedProduct = await Product.findByIdAndUpdate(
     id,
-    body,
+    parsed.data,
     { new: true }
   );
 
@@ -60,10 +67,9 @@ export async function DELETE(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params; // ✅ REQUIRED
+  const { id } = await context.params;
 
   await connectDB();
-
   const deleted = await Product.findByIdAndDelete(id);
 
   if (!deleted) {

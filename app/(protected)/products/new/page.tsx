@@ -8,6 +8,7 @@ type ProductForm = {
   price: string;
   stock: string;
   imageUrl: string;
+  category?: string;
 };
 
 export default function NewProductPage() {
@@ -19,6 +20,7 @@ export default function NewProductPage() {
     price: "",
     stock: "",
     imageUrl: "",
+    category: "",
   });
 
   async function handleSubmit(e: React.FormEvent) {
@@ -53,6 +55,18 @@ export default function NewProductPage() {
             }
           />
         ))}
+<select
+  className="w-full border p-3 rounded"
+  value={form.category}
+  onChange={(e) =>
+    setForm({ ...form, category: e.target.value })
+  }
+>
+  <option value="">Select Category</option>
+  <option value="Books">Books</option>
+  <option value="Electronics">Electronics</option>
+  <option value="Clothing">Clothing</option>
+</select>
 
         <div className="flex gap-4">
           <input
