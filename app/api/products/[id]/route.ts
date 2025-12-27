@@ -1,83 +1,68 @@
+// app/api/products/route.ts
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
-import { productSchema } from "@/lib/validators/product";
 
-/* =========================
-   GET → Fetch single product
-   ========================= */
-export async function GET(
-  req: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id } = await context.params;
-
+export async function GET() {
   await connectDB();
-  const product = await Product.findById(id);
-
-  if (!product) {
-    return NextResponse.json(
-      { error: "Product not found" },
-      { status: 404 }
-    );
-  }
-
-  return NextResponse.json(product);
+  const products = await Product.find().sort({ createdAt: -1 });
+  return NextResponse.json(products);
 }
 
-/* =========================
-   PUT → Update product (by id)
-   ========================= */
-export async function PUT(
-  req: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id } = await context.params;
-  const body = await req.json();
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    await connectDB();
 
-  const parsed = productSchema.safeParse(body);
-  if (!parsed.success) {
+    // Check if category exists before creating
+    if (!body.category) {
+      return NextResponse.json(
+        { error: "Category is required" }, 
+        { status: 400 }
+      );
+    }
+
+    const product = await Product.create({
+      ...body,
+      sales: [],
+    });
+
+    return NextResponse.json(product, { status: 201 });
+  } catch (error) {
+    console.error("Create Product Error:", error);
     return NextResponse.json(
-      { errors: parsed.error.flatten().fieldErrors },
-      { status: 400 }
+      { error: "Failed to create product" },
+      { status: 500 }
     );
   }
-
-  await connectDB();
-  const updatedProduct = await Product.findByIdAndUpdate(
-    id,
-    parsed.data,
-    { new: true }
-  );
-
-  if (!updatedProduct) {
-    return NextResponse.json(
-      { error: "Product not found" },
-      { status: 404 }
-    );
-  }
-
-  return NextResponse.json(updatedProduct);
 }
 
-/* =========================
-   DELETE → Delete product
-   ========================= */
-export async function DELETE(
-  req: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id } = await context.params;
-
-  await connectDB();
-  const deleted = await Product.findByIdAndDelete(id);
-
-  if (!deleted) {
-    return NextResponse.json(
-      { error: "Product not found" },
-      { status: 404 }
-    );
-  }
-
-  return NextResponse.json({ success: true });
+// ... keep PUT and DELETE as they are
+export async function PUT(req: Request) {
+    const body = await req.json();
+    const { id, ...updates } = body;
+  
+    await connectDB();
+    const updated = await Product.findByIdAndUpdate(id, updates, {
+      new: true,
+    });
+  
+    return NextResponse.json(updated);
+}
+  
+export async function DELETE(req: Request) {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+  
+    if (!id) {
+      return NextResponse.json(
+        { error: "Product ID required" },
+        { status: 400 }
+      );
+    }
+  
+    await connectDB();
+    await Product.findByIdAndDelete(id);
+  
+    return NextResponse.json({ success: true });
 }
