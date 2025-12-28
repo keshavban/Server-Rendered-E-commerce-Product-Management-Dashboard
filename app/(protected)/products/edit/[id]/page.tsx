@@ -9,12 +9,12 @@ type ProductForm = {
   price: string;
   stock: string;
   imageUrl: string;
-  category?: string;
+  category: string;
 };
 
 export default function EditProductPage() {
   const router = useRouter();
-  const params = useParams(); // ✅ correct for client component
+  const params = useParams();
   const id = params.id as string;
 
   const [form, setForm] = useState<ProductForm>({
@@ -34,16 +34,16 @@ export default function EditProductPage() {
 
     fetch(`/api/products/${id}`)
       .then((res) => res.json())
-      .then((data) =>
+      .then((data) => {
         setForm({
-          name: data.name,
-          description: data.description,
-          price: String(data.price),
-          stock: String(data.stock),
-          imageUrl: data.imageUrl || "",
-          category: data.category || "",
-        })
-      );
+          name: data?.name ?? "",
+          description: data?.description ?? "",
+          price: data?.price != null ? String(data.price) : "",
+          stock: data?.stock != null ? String(data.stock) : "",
+          imageUrl: data?.imageUrl ?? "",
+          category: data?.category ?? "",
+        });
+      });
   }, [id]);
 
   /* =========================
@@ -82,22 +82,23 @@ export default function EditProductPage() {
             placeholder={field}
             value={form[field]}
             onChange={(e) =>
-              setForm({ ...form, [field]: e.target.value })
+              setForm((prev) => ({ ...prev, [field]: e.target.value }))
             }
           />
         ))}
-<select
-  className="w-full border p-3 rounded"
-  value={form.category}
-  onChange={(e) =>
-    setForm({ ...form, category: e.target.value })
-  }
->
-  <option value="">Select Category</option>
-  <option value="books">Books</option>
-  <option value="Electronics">Electronics</option>
-  <option value="Clothing">Clothing</option>
-</select>
+
+        <select
+          className="w-full border p-3 rounded"
+          value={form.category}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, category: e.target.value }))
+          }
+        >
+          <option value="">Select Category</option>
+          <option value="books">Books</option>
+          <option value="electronics">Electronics</option>
+          <option value="clothing">Clothing</option>
+        </select>
 
         <div className="flex gap-4">
           <input
@@ -106,7 +107,7 @@ export default function EditProductPage() {
             className="w-full border p-3 rounded"
             value={form.price}
             onChange={(e) =>
-              setForm({ ...form, price: e.target.value })
+              setForm((prev) => ({ ...prev, price: e.target.value }))
             }
           />
           <input
@@ -115,7 +116,7 @@ export default function EditProductPage() {
             className="w-full border p-3 rounded"
             value={form.stock}
             onChange={(e) =>
-              setForm({ ...form, stock: e.target.value })
+              setForm((prev) => ({ ...prev, stock: e.target.value }))
             }
           />
         </div>
@@ -137,13 +138,16 @@ export default function EditProductPage() {
             });
 
             const result = await res.json();
-            setForm({ ...form, imageUrl: result.url });
+            if (result?.url) {
+              setForm((prev) => ({ ...prev, imageUrl: result.url }));
+            }
           }}
         />
 
         {form.imageUrl && (
           <img
             src={form.imageUrl}
+            alt="Product preview"
             className="h-40 object-cover rounded mt-3"
           />
         )}
