@@ -1,3 +1,7 @@
+"use client";
+
+import { signOut } from "next-auth/react";
+
 export default function Navbar() {
   return (
     <header
@@ -29,6 +33,11 @@ export default function Navbar() {
         </span>
 
         <button
+          onClick={() =>
+            signOut({
+              callbackUrl: "/login", // redirect after logout
+            })
+          }
           style={{
             padding: "6px 14px",
             borderRadius: "6px",
