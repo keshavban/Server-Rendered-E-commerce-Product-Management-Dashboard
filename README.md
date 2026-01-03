@@ -122,6 +122,17 @@ The dashboard is **server-rendered where possible** for performance and SEO, whi
 
 ---
 
+## Vercel Deployed Link 
+- https://server-rendered-e-commerce-product-management-dashbo-5vk76a06t.vercel.app/products
+- Dummy Credentials of superadmin: 
+- Email : superadmin@example.com 
+- Password : qwerty
+- Dummy Credentials of simple admin :
+- Email : hi@example.com 
+- Password : 12345
+
+---
+
 ## 🧱 Tech Stack
 
 ### Frontend
