@@ -42,11 +42,17 @@ export function SellButton({ productId, className = "" }: Props) {
     <button
       onClick={handleSell}
       disabled={loading}
-      className={`
-        px-4 py-2 text-sm rounded transition disabled:opacity-50
-        ${className || "bg-emerald-600 text-white hover:bg-emerald-700"}
-      `}
-    >
+        
+    style={{
+      padding: "6px 14px",
+      fontSize: "14px",
+      color: "#ffffff",
+      background: "#059669",
+      borderRadius: "6px",
+      border: "none",
+      cursor: "pointer",
+    }}
+  >
       {loading ? "Selling..." : "Sell"}
     </button>
   );

@@ -188,22 +188,7 @@ export default function ProductsPage() {
     Edit
   </a>
 
-  {/* SELL */}
-  <button
-    onClick={() => {}}
-    style={{
-      padding: "6px 14px",
-      fontSize: "14px",
-      color: "#ffffff",
-      background: "#059669",
-      borderRadius: "6px",
-      border: "none",
-      cursor: "pointer",
-    }}
-  >
-    Sell
-  </button>
-
+ <SellButton productId={product._id} />
   {/* DELETE */}
   <button
     onClick={() => handleDelete(product._id)}
