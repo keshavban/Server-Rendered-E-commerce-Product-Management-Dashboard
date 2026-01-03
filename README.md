@@ -190,67 +190,48 @@ ecommerce-admin/
 ## ⚙️ Setup & Installation
 
 ### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/your-username/ecommerce-admin.git
-cd ecommerce-admin
-2️⃣ Install Dependencies
-bash
-Copy code
-npm install
-3️⃣ Environment Variables
-Create a .env.local file:
 
-env
-Copy code
-MONGODB_URI=your_mongodb_connection_string
-NEXTAUTH_SECRET=your_secret_key
-NEXTAUTH_URL=http://localhost:3000
-4️⃣ Run the Development Server
-bash
-Copy code
-npm run dev
-Open in browser:
+- git clone https://github.com/your-username/ecommerce-admin.git
+- cd ecommerce-admin
+### 2️⃣ Install Dependencies
 
-arduino
-Copy code
-http://localhost:3000
-🛡️ Security Considerations
-Protected routes using server-side session checks
+- npm install
+### 3️⃣ Environment Variables
+- Create a .env.local file:
 
-Role-based permission checks on API routes
+- MONGODB_URI=your_mongodb_connection_string
+- NEXTAUTH_SECRET=your_secret_key
+- NEXTAUTH_URL=http://localhost:3000
+### 4️⃣ Run the Development Server
 
-Prevents unauthorized CRUD actions
+- npm run dev
+- Open in browser:
 
-Safe admin deletion rules
+- http://localhost:3000
+## 🛡️ Security Considerations
+- Protected routes using server-side session checks
+- Role-based permission checks on API routes
+- Prevents unauthorized CRUD actions
+- Safe admin deletion rules
 
-🚀 Future Enhancements
-Export sales reports (CSV / PDF)
+## 🚀 Future Enhancements
+- Export sales reports (CSV / PDF)
+- Role-based dashboard views
+- Real-time updates
+- Image upload support (Cloudinary / S3)
+- Audit logs for admin actions
+- Notifications system
 
-Role-based dashboard views
+## 🧠 Learning Outcomes
+- Real-world Next.js App Router usage
+- Server vs Client components
+- Secure admin system design
+- Data visualization dashboards
+- Clean UI architecture
+- Scalable project structure
 
-Real-time updates
-
-Image upload support (Cloudinary / S3)
-
-Audit logs for admin actions
-
-Notifications system
-
-🧠 Learning Outcomes
-Real-world Next.js App Router usage
-
-Server vs Client components
-
-Secure admin system design
-
-Data visualization dashboards
-
-Clean UI architecture
-
-Scalable project structure
-
-📜 License
-This project is intended for learning and demonstration purposes.
+## 📜 License
+- This project is intended for learning and demonstration purposes.
 
 
 
