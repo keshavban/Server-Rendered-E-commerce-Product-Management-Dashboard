@@ -1,105 +1,60 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  LayoutDashboard, 
-  ShoppingBag, 
-  Users, 
-  Settings, 
-  LogOut, 
-  Store,
-  LucideIcon
-} from "lucide-react";
 
 export default function Sidebar() {
   const pathname = usePathname();
 
+  const link = (href: string, label: string, icon: string) => {
+    const active = pathname.startsWith(href);
+
+    return (
+      <Link
+        href={href}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          padding: "10px 14px",
+          borderRadius: "8px",
+          color: active ? "#ffffff" : "#94a3b8",
+          background: active ? "rgba(99,102,241,0.15)" : "transparent",
+          fontWeight: active ? 600 : 500,
+          textDecoration: "none",
+          transition: "all 0.2s ease",
+        }}
+      >
+        <span style={{ fontSize: "16px" }}>{icon}</span>
+        {label}
+      </Link>
+    );
+  };
+
   return (
-    <aside className="w-72 min-h-screen bg-slate-950 border-r border-slate-800 flex flex-col shadow-2xl z-50">
-      {/* 1. BRANDING / HEADER */}
-      <div className="p-8 pb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <Store className="text-white w-6 h-6" />
-          </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
-            <span className="text-indigo-500">General</span>
-          </h1>
-        </div>
-        
+    <aside
+      style={{
+        width: "240px",
+        background: "#020617",
+        borderRight: "1px solid #1e293b",
+        padding: "20px 12px",
+      }}
+    >
+      <div
+        style={{
+          marginBottom: "20px",
+          fontSize: "13px",
+          color: "#64748b",
+          letterSpacing: "0.05em",
+        }}
+      >
+        MENU
       </div>
 
-      {/* 2. NAVIGATION LINKS */}
-      <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
-        <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-4">
-          Menu
-        </p>
-        
-        <SidebarLink 
-          href="/dashboard" 
-          label="Dashboard" 
-          icon={LayoutDashboard} 
-          isActive={pathname === "/dashboard"} 
-        />
-        <SidebarLink 
-          href="/products" 
-          label="Products" 
-          icon={ShoppingBag} 
-          isActive={pathname.startsWith("/products")} 
-        />
-        <SidebarLink 
-          href="/admins" 
-          label="Admins" 
-          icon={Users} 
-          isActive={pathname.startsWith("/admins")} 
-        />
-
-        
-      </nav>
-
-      {/* 3. USER PROFILE / FOOTER */}
-      
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+        {link("/dashboard", "Dashboard", "📊")}
+        {link("/products", "Products", "📦")}
+        {link("/admins", "Admins", "👤")}
+      </div>
     </aside>
-  );
-}
-
-/* --- HELPER COMPONENT --- */
-function SidebarLink({ 
-  href, 
-  label, 
-  icon: Icon, 
-  isActive 
-}: { 
-  href: string; 
-  label: string; 
-  icon: LucideIcon; 
-  isActive: boolean 
-}) {
-  return (
-    <Link
-      href={href}
-      className={`
-        relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
-        ${
-          isActive
-            ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/20"
-            : "text-slate-400 hover:bg-slate-900 hover:text-white"
-        }
-      `}
-    >
-      {/* Icon with slight animation on hover */}
-      <Icon 
-        size={20} 
-        className={`${!isActive && "group-hover:text-indigo-400"} transition-colors`} 
-      />
-      
-      <span className="font-medium">{label}</span>
-
-      {/* Right Arrow indicator for active state */}
-      {isActive && (
-        <div className="ml-auto w-1.5 h-1.5 bg-white rounded-full opacity-50" />
-      )}
-    </Link>
   );
 }

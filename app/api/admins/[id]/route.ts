@@ -4,49 +4,56 @@ import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import AdminModel from "@/models/Admin";
 
-export async function POST(
+export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user.role !== "SUPER_ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  if (session.user.role !== "SUPER_ADMIN") {
+    return NextResponse.json(
+      { error: "Forbidden: Super Admin only" },
+      { status: 403 }
+    );
+  }
+
+  const { id } = await params;
 
   await connectDB();
 
-  const targetAdmin = await AdminModel.findById(params.id);
+  const targetAdmin = await AdminModel.findById(id);
 
   if (!targetAdmin) {
     return NextResponse.json({ error: "Admin not found" }, { status: 404 });
   }
 
-  // ❌ Cannot delete yourself
-  if (targetAdmin.email === session.user.email) {
+  // ❌ Prevent deleting yourself
+  if (session.user.email === targetAdmin.email) {
     return NextResponse.json(
-      { error: "You cannot delete yourself" },
+      { error: "You cannot delete your own account" },
       { status: 400 }
     );
   }
 
-  // ❌ Cannot delete last SUPER_ADMIN
+  // ❌ Prevent deleting last super admin
   if (targetAdmin.role === "SUPER_ADMIN") {
     const superAdminCount = await AdminModel.countDocuments({
       role: "SUPER_ADMIN",
     });
 
-    if (superAdminCount <= 1) {
+    if (superAdminCount === 1) {
       return NextResponse.json(
-        { error: "At least one SUPER_ADMIN required" },
+        { error: "Cannot delete the last Super Admin" },
         { status: 400 }
       );
     }
   }
 
-  await AdminModel.findByIdAndDelete(params.id);
+  await AdminModel.findByIdAndDelete(id);
 
-  return NextResponse.redirect(
-    new URL("/admins", req.url)
-  );
+  return NextResponse.json({ success: true });
 }

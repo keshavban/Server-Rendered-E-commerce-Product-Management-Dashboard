@@ -4,9 +4,10 @@ import { useState } from "react";
 
 type Props = {
   productId: string;
+  className?: string; // ✅ allow styling from parent
 };
 
-export function SellButton({ productId }: Props) {
+export function SellButton({ productId, className = "" }: Props) {
   const [loading, setLoading] = useState(false);
 
   async function handleSell() {
@@ -33,10 +34,7 @@ export function SellButton({ productId }: Props) {
       return;
     }
 
-    alert(
-      `Sold ${data.sold} units for ₹${data.totalAmount}`
-    );
-
+    alert(`Sold ${data.sold} units for ₹${data.totalAmount}`);
     window.location.reload();
   }
 
@@ -44,7 +42,10 @@ export function SellButton({ productId }: Props) {
     <button
       onClick={handleSell}
       disabled={loading}
-      className="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 disabled:opacity-50"
+      className={`
+        px-4 py-2 text-sm rounded transition disabled:opacity-50
+        ${className || "bg-emerald-600 text-white hover:bg-emerald-700"}
+      `}
     >
       {loading ? "Selling..." : "Sell"}
     </button>

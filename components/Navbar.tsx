@@ -1,20 +1,42 @@
-// components/Navbar.tsx
-"use client";
-
-import { signOut } from "next-auth/react";
-
-export default function Topbar() {
+export default function Navbar() {
   return (
-    <header className="h-16 flex items-center justify-between px-6 border-b border-[var(--border)] bg-[var(--panel)]">
-      <h1 className="text-lg font-semibold text-indigo-400">
-        Admin Portal
-      </h1>
+    <header
+      style={{
+        height: "64px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "0 24px",
+        background: "linear-gradient(to right, #020617, #020617cc)",
+        borderBottom: "1px solid #1e293b",
+      }}
+    >
+      <div
+        style={{
+          fontSize: "20px",
+          fontWeight: 700,
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+        }}
+      >
+        🏠 General Admin Portal
+      </div>
 
-      <div className="flex items-center gap-4">
-        <span className="text-sm text-[var(--muted)]">Admin</span>
+      <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        <span style={{ color: "#94a3b8", fontSize: "14px" }}>
+          Admin
+        </span>
+
         <button
-          onClick={() => signOut({ callbackUrl: "/login" })} // Fix here
-          className="px-4 py-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 text-sm font-medium transition-colors"
+          style={{
+            padding: "6px 14px",
+            borderRadius: "6px",
+            border: "1px solid #334155",
+            background: "transparent",
+            color: "#e5e7eb",
+            cursor: "pointer",
+          }}
         >
           Logout
         </button>
